@@ -75,3 +75,13 @@ class _LocationScreenState extends State<LocationScreen> {
     ));
   }
 }
+
+//
+// var temp = decodeData['main']['temp'];
+// log(temp.toString());
+//
+// int condition = decodeData['weather'][0]['id'];
+// log(condition.toString());
+//
+// String name = decodeData['name'];
+// log(name.toString());

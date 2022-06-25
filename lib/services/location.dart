@@ -6,6 +6,7 @@ class Location {
   double longitude;
   double latitude;
 
+  // Use the Geolocation library to get the current location
   Future getCurrentLocation() async {
     try {
       Position position = await Geolocator.getCurrentPosition(

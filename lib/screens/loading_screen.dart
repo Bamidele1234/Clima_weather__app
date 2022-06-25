@@ -3,7 +3,11 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:clima/services/location.dart';
-import 'package:http/http.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
+import 'package:clima/services/networking.dart';
+
+const apiKey = '9d013311aedb1f156dc1a34e56998244';
 
 class LoadingScreen extends StatefulWidget {
   const LoadingScreen({Key? key}) : super(key: key);
@@ -13,26 +17,25 @@ class LoadingScreen extends StatefulWidget {
 }
 
 class _LoadingScreenState extends State<LoadingScreen> {
-  getLocation() async {
-    Location location = Location();
-    await location.getCurrentLocation();
-    log('Latitude = ${location.latitude.toString()}');
-    log('Longitude = ${location.longitude.toString()}');
-  }
-
-  getData() async {
-    // Configure the http request to the RESTful server
-    var url = Uri.parse(
-        'https://api.unsplash.com/photos/random?count=1&orientation=portrait&client_id=GGHMWCsUFRHVRCL5jHePT2dzymk20ixPeV1bkOXKrZI');
-    Response response = await get(url);
-    log(response.persistentConnection.toString());
-  }
+  double? latitude;
+  double? longitude;
 
   @override
-  void initState() {
+  initState() {
     super.initState();
-    getLocation();
-    getData();
+    getLocationData();
+  }
+
+  getLocationData() async {
+    Location location = Location();
+    await location.getCurrentLocation();
+
+    latitude = location.latitude;
+    longitude = location.longitude;
+    NetworkHelper networkHelper = NetworkHelper(
+        'http://api.openweathermap.org/data/2.5/weather?lat=$latitude&lon=$longitude&APPID=$apiKey');
+
+    var weatherData = await networkHelper.getData();
   }
 
   @override
