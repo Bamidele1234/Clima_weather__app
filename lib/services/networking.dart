@@ -1,4 +1,4 @@
-import 'dart:math';
+import 'dart:developer';
 
 import 'package:http/http.dart' as http;
 import 'dart:convert';
@@ -12,7 +12,9 @@ class NetworkHelper {
   final String url;
 
   Future getData() async {
-    http.Response response = await http.get(Uri.parse(url));
+    log('I got executed');
+    http.Response response = await http.get(
+        Uri.parse(url)); // This is the Judas Iscariot, filthy piece of sh*t
 
     if (response.statusCode == 200) {
       // If the request is successful
@@ -20,7 +22,7 @@ class NetworkHelper {
 
       return jsonDecode(body);
     } else {
-      log(response.statusCode);
+      log(response.statusCode.toString());
     }
   }
 }

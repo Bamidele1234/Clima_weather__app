@@ -1,0 +1,12 @@
+What's working
+1. The location class is able to retrieve my location, even when offline
+2. During initialization, the loading_screen creates an instance of the Location class
+ a. It gets the longitude and latitude and passes it as a parameter into a String, with other params
+ b. The Network helper object then takes the String and parses it into a url
+ c. The http library then tries to make a response
+
+What's not working
+1. When the device is not connected, the http will report an 'Unhandled Exception'
+
+Try
+1. Putting it into a try, catch, finally block to catch the exception.

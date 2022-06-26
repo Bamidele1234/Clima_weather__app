@@ -15,6 +15,8 @@ class Location {
           desiredAccuracy: LocationAccuracy.high);
       latitude = position.latitude;
       longitude = position.longitude;
+      log(longitude.toString());
+      log(latitude.toString());
     } catch (e) {
       log(e.toString());
     }
