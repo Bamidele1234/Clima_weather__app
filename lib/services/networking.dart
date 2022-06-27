@@ -1,5 +1,4 @@
 import 'dart:developer';
-
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
@@ -12,17 +11,21 @@ class NetworkHelper {
   final String url;
 
   Future getData() async {
-    log('I got executed');
-    http.Response response = await http.get(
-        Uri.parse(url)); // This is the Judas Iscariot, filthy piece of sh*t
+    dynamic res;
+    try {
+      // Check if there's internet connectivity
+      http.Response response = await http.get(Uri.parse(url));
+      if (response.statusCode == 200) {
+        // If the request is successful
+        String body = response.body;
 
-    if (response.statusCode == 200) {
-      // If the request is successful
-      String body = response.body;
-
-      return jsonDecode(body);
-    } else {
-      log(response.statusCode.toString());
+        res = jsonDecode(body);
+      } else {
+        log(response.statusCode.toString());
+      }
+      return res;
+    } catch (e) {
+      return;
     }
   }
 }
