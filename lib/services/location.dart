@@ -11,14 +11,26 @@ class Location {
   // Use the Geolocation library to get the current location
   Future getCurrentLocation() async {
     try {
-      Position position = await Geolocator.getCurrentPosition(
-          desiredAccuracy: LocationAccuracy.high);
+      LocationPermission permission;
+      permission = await Geolocator
+          .checkPermission(); // First checks to see if Location permissions for the app has been enabled
+
+      if (permission == LocationPermission.denied) {
+        permission = await Geolocator.requestPermission();
+        if (permission == LocationPermission.denied) {
+          return Future.error('Location Permissions are denied');
+        }
+      }
+
+      Position position = await Geolocator
+          .getCurrentPosition(); // If access is denied an exception is thrown here
+
+      // Finally assign the locator values into longitude and latitude.
       latitude = position.latitude;
       longitude = position.longitude;
-      log(longitude.toString());
-      log(latitude.toString());
+      return;
     } catch (e) {
-      log(e.toString());
+      log(e.toString()); // todo: You have some error catching work to do here
     }
   }
 }

@@ -75,6 +75,7 @@ class _LocationScreenState extends State<LocationScreen> {
                 TextButton(
                   onPressed: () async {
                     var weatherData = await weather.getLocationWeather();
+                    log(weatherData.toString());
                     updateUI(weatherData);
                   },
                   child: Icon(
@@ -93,7 +94,8 @@ class _LocationScreenState extends State<LocationScreen> {
                       ),
                     );
                     if (typedName != null) {
-                      var weatherData = await weather.getCityWeather(typedName);
+                      var weatherData = await weather.getCityWeather(
+                          typedName); // todo: Enable better handling when an invalid city name is inputted
                       updateUI(weatherData);
                     }
                   },
