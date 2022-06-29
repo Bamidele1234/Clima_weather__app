@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:clima/utilities/constants.dart';
+import 'package:clima/screens/loading_screen.dart';
 
 class Disconnected extends StatefulWidget {
   const Disconnected({Key? key}) : super(key: key);
@@ -22,7 +23,12 @@ class _DisconnectedState extends State<Disconnected> {
             ),
             TextButton(
               onPressed: () {
-                Navigator.pop(context);
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const LoadingScreen(),
+                  ),
+                );
               },
               child: Icon(
                 color: kdefaultColor,

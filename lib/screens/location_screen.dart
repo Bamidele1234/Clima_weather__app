@@ -59,7 +59,10 @@ class _LocationScreenState extends State<LocationScreen> {
         content: Text(
           message,
           textAlign: TextAlign.center,
-          style: const TextStyle(fontSize: 15.0),
+          style: const TextStyle(
+              fontSize: 15.0,
+              fontWeight: FontWeight.w500,
+              fontStyle: FontStyle.italic),
         ),
       );
 
