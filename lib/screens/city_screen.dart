@@ -22,17 +22,20 @@ class _CityScreenState extends State<CityScreen> {
         constraints: const BoxConstraints.expand(),
         child: SafeArea(
           child: Column(
-            children: <Widget>[
+            children: [
               Align(
                 alignment: Alignment.topLeft,
-                child: TextButton(
-                  onPressed: () {
-                    Navigator.pop(context);
-                  },
-                  child: Icon(
-                    color: kdefaultColor,
-                    Icons.arrow_back_ios,
-                    size: 50.0,
+                child: Padding(
+                  padding: const EdgeInsets.all(20.0),
+                  child: TextButton(
+                    onPressed: () {
+                      Navigator.pop(context, 'null');
+                    },
+                    child: Icon(
+                      color: kdefaultColor,
+                      Icons.arrow_back_ios,
+                      size: 40.0,
+                    ),
                   ),
                 ),
               ),

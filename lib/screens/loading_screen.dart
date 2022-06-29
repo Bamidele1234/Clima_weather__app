@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:clima/screens/location_screen.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:clima/services/weather.dart';
+import 'package:clima/screens/disconnected_screen.dart';
 
 class LoadingScreen extends StatefulWidget {
   const LoadingScreen({Key? key}) : super(key: key);
@@ -11,9 +12,6 @@ class LoadingScreen extends StatefulWidget {
 }
 
 class _LoadingScreenState extends State<LoadingScreen> {
-  double? latitude;
-  double? longitude;
-
   @override
   initState() {
     super.initState();
@@ -22,14 +20,24 @@ class _LoadingScreenState extends State<LoadingScreen> {
 
   getLocationData() async {
     var weatherData = await WeatherModel().getLocationWeather();
+
     if (!mounted) return;
 
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) => LocationScreen(locationWeather: weatherData),
-      ),
-    );
+    if (weatherData != null) {
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => LocationScreen(locationWeather: weatherData),
+        ),
+      );
+    } else {
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => const Disconnected(),
+        ),
+      );
+    }
   }
 
   @override

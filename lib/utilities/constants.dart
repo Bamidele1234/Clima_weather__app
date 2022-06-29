@@ -16,9 +16,16 @@ TextStyle kButtonTextStyle = TextStyle(
   fontFamily: 'Spartan MB',
 );
 
+TextStyle kRefreshTextStyle = TextStyle(
+  color: kdefaultColor,
+  fontSize: 22.0,
+  fontFamily: 'Spartan MB',
+);
+
 const kConditionTextStyle = TextStyle(
   fontSize: 100.0,
 );
+
 Color kdefaultColor = Colors.white70;
 
 const kTextFieldDecoration = InputDecoration(

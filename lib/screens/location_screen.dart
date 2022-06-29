@@ -35,7 +35,7 @@ class _LocationScreenState extends State<LocationScreen> {
       if (weatherData == null) {
         temperature = 0;
         weatherIcon = '';
-        cityName = '😭 ';
+        cityName = '';
         weatherMessage = '';
         return;
       }
@@ -51,88 +51,122 @@ class _LocationScreenState extends State<LocationScreen> {
     });
   }
 
+  displaySb(String message) =>
+      ScaffoldMessenger.of(context).showSnackBar(ksnackBar(message));
+
+  ksnackBar(String message) => SnackBar(
+        duration: const Duration(milliseconds: 1200),
+        content: Text(
+          message,
+          textAlign: TextAlign.center,
+          style: const TextStyle(fontSize: 15.0),
+        ),
+      );
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        body: Container(
-      decoration: BoxDecoration(
-        image: DecorationImage(
-          image: const AssetImage('images/location_background.jpg'),
-          fit: BoxFit.cover,
-          colorFilter: ColorFilter.mode(
-              Colors.white.withOpacity(0.8), BlendMode.dstATop),
+      body: Container(
+        decoration: BoxDecoration(
+          image: DecorationImage(
+            image: const AssetImage('images/location_background.jpg'),
+            fit: BoxFit.cover,
+            colorFilter: ColorFilter.mode(
+                Colors.white.withOpacity(0.8), BlendMode.dstATop),
+          ),
         ),
-      ),
-      constraints: const BoxConstraints.expand(),
-      child: SafeArea(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                TextButton(
-                  onPressed: () async {
-                    var weatherData = await weather.getLocationWeather();
-                    log(weatherData.toString());
-                    updateUI(weatherData);
-                  },
-                  child: Icon(
-                    color: kdefaultColor,
-                    Icons.near_me,
-                    size: 50.0,
-                  ),
-                ),
-                TextButton(
-                  onPressed: () async {
-                    var typedName = await Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        // Navigate to the next screen when the button is pressed
-                        builder: (context) => const CityScreen(),
+        constraints: const BoxConstraints.expand(),
+        child: SafeArea(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              Padding(
+                padding: const EdgeInsets.all(20.0),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    TextButton(
+                      onPressed: () async {
+                        var weatherData = await weather.getLocationWeather();
+                        if (weatherData != null) {
+                          updateUI(weatherData);
+                        } else {
+                          displaySb('No internet connection, please retry');
+                        }
+                        log(weatherData.toString());
+                      },
+                      child: Icon(
+                        color: kdefaultColor,
+                        Icons.near_me,
+                        size: 50.0,
                       ),
-                    );
-                    if (typedName != null) {
-                      var weatherData = await weather.getCityWeather(
-                          typedName); // todo: Enable better handling when an invalid city name is inputted
-                      updateUI(weatherData);
-                    }
-                  },
-                  child: Icon(
-                    color: kdefaultColor,
-                    Icons.location_city,
-                    size: 50.0,
-                  ),
+                    ),
+                    TextButton(
+                      onPressed: () async {
+                        var typedName = await Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            // Navigate to the next screen when the button is pressed
+                            builder: (context) => const CityScreen(),
+                          ),
+                        );
+                        if (typedName != null) {
+                          if (typedName != 'null') {
+                            var weatherData =
+                                await weather.getCityWeather(typedName);
+                            if (weatherData != null) {
+                              if (weatherData == 'Bad response') {
+                                displaySb('$typedName is not a valid location');
+                              } else {
+                                updateUI(weatherData);
+                              }
+                            } else {
+                              displaySb('No internet connection, please retry');
+                            }
+                          } else {
+                            return;
+                          }
+                        } else {
+                          displaySb('You did not type in a location');
+                        }
+                      },
+                      child: Icon(
+                        color: kdefaultColor,
+                        Icons.location_city,
+                        size: 50.0,
+                      ),
+                    ),
+                  ],
                 ),
-              ],
-            ),
-            Padding(
-              padding: const EdgeInsets.only(left: 15.0),
-              child: Row(
-                children: [
-                  Text(
-                    '$temperature º',
-                    style: kTempTextStyle,
-                  ),
-                  Text(
-                    weatherIcon!,
-                    style: kConditionTextStyle,
-                  ),
-                ],
               ),
-            ),
-            Padding(
-              padding: const EdgeInsets.only(right: 15.0),
-              child: Text(
-                "$weatherMessage in $cityName!",
-                textAlign: TextAlign.right,
-                style: kMessageTextStyle,
+              Padding(
+                padding: const EdgeInsets.only(left: 15.0),
+                child: Row(
+                  children: [
+                    Text(
+                      '$temperature º',
+                      style: kTempTextStyle,
+                    ),
+                    Text(
+                      weatherIcon!,
+                      style: kConditionTextStyle,
+                    ),
+                  ],
+                ),
               ),
-            ),
-          ],
+              Padding(
+                padding: const EdgeInsets.only(right: 15.0),
+                child: Text(
+                  "$weatherMessage in $cityName !",
+                  textAlign: TextAlign.right,
+                  style: kMessageTextStyle,
+                ),
+              ),
+            ],
+          ),
         ),
       ),
-    ));
+    );
   }
 }

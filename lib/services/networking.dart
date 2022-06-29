@@ -22,6 +22,7 @@ class NetworkHelper {
         res = jsonDecode(body);
       } else {
         log(response.statusCode.toString());
+        res = 'Bad response';
       }
       return res;
     } catch (e) {
