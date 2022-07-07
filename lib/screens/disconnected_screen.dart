@@ -23,7 +23,7 @@ class _DisconnectedState extends State<Disconnected> {
             ),
             TextButton(
               onPressed: () {
-                Navigator.push(
+                Navigator.pushReplacement(
                   context,
                   MaterialPageRoute(
                     builder: (context) => const LoadingScreen(),

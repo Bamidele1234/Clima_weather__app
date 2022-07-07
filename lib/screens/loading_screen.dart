@@ -24,14 +24,14 @@ class _LoadingScreenState extends State<LoadingScreen> {
     if (!mounted) return;
 
     if (weatherData != null) {
-      Navigator.push(
+      Navigator.pushReplacement(
         context,
         MaterialPageRoute(
           builder: (context) => LocationScreen(locationWeather: weatherData),
         ),
       );
     } else {
-      Navigator.push(
+      Navigator.pushReplacement(
         context,
         MaterialPageRoute(
           builder: (context) => const Disconnected(),
